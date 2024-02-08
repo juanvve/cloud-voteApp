@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Mi primer lambda en AWS
+
+Parameters:
+	LambdaName:
+		Description: Nombre de la funcion Lambda
+		Type: String
+
+	RuntimeLambda:
+		Description: Ingresa el runtime de la funcion lambda
+		Type: String
+		Default: python3.10
+		AllowedValues:
+			-python3.7
+			-python2.7
+			-ruby2.5
+			-nodejs8.10
+			-java8
+			-dotnetcore2.1
+
+Resources:
+  LambdaJV:
+		Type: AWS:Serverless:Function
+		Properties: 
+			FunctionName: !Ref NombreLambda
+			Handler: lambda_function.lambda_handler
+			Runtime: !Ref RuntimeLambda
+			MemoriSize: 512
+			TimeOut: 600
+			Role: !GetAtt LambdaRoleJV.arn
+
+Outputs: 
+	LambdaARN:
+		Description: "ARN(Amazon Resource Name) de la funcion Lambda"
+		Value:
+			!GetAtt LambdaJV.arn
+		Export:
+			Name: LambdaJVArn
+	LambdaName:
+		Description: "Nombre de la funcion Lambda"
+		Value: 
+			!Ref LambdaJV
+		Export:
+			Name: LambdaJVName
